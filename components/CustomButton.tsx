@@ -1,7 +1,8 @@
 "use client";
 import Image from 'next/image'
+import { CustomButtonProps } from '@/types'
 
-const CustomButton = () => {
+const CustomButton = ({ title, containerStyles, handleClick }: CustomButtonProps) => {
     return (
         <button
             disabled={false}
