@@ -23,8 +23,8 @@ const SearchManufactures = ({
       : manufacturers.filter((item) =>
           item
             .toLocaleLowerCase()
-            .replace(/\s+/g, "")
-            .includes(query.toLowerCase().replace(/\s+/g, "")),
+            .replace(/\s+/g, "") // replace any spaces globally 
+            .includes(query.toLowerCase().replace(/\s+/g, "")), // check content
         );
   return (
     <div className="search-manufacturer">
@@ -33,7 +33,7 @@ const SearchManufactures = ({
         onChange={(value) => setManufacturer(value ?? "")}
       >
         <div className="relative w-full">
-          {/* .Button устарело (((*/}
+          {/* .Button obsoleted (((*/}
           <ComboboxButton className="absolute top-[14px]">
             <Image
               src="/car-logo.svg"
@@ -43,7 +43,7 @@ const SearchManufactures = ({
               alt="car logo"
             />
           </ComboboxButton>
-          {/* .Input устарело too(((*/}
+          {/* .Input obsoleted too(((*/}
           <ComboboxInput
             className="search-manufacturer__input"
             placeholder="Volksvagen"
@@ -58,8 +58,9 @@ const SearchManufactures = ({
             leaveTo="opacity-0"
             afterLeave={() => setQuery("")} // Reset the search query after the transition completes
           >
+            {/* .Options/.Option is obsoleted */}
             <ComboboxOptions
-              // anchor="bottom"
+              // optimizating css
               unmount={false}
               className="[--anchor-gap:4px] [--anchor-max-height:240px] max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
             >
@@ -71,6 +72,7 @@ const SearchManufactures = ({
                   }
                   value={item}
                 >
+                  {/* active is obsoleted, change parameter in the future */}
                   {({ selected, active }) => (
                     <>
                       <span
