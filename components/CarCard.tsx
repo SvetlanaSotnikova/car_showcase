@@ -55,7 +55,7 @@ const CarCard = ({ car }: CarCardProps) => {
           <div className="flex flex-col justify-center items-center gap-2">
             <Image src="/gas.svg" width={20} height={20} alt="gas" />
             <p className="text-[14px] leading-[17px]">
-              {!isNaN(Number(city_mpg)) ? city_mpg : 23} MPG
+              {city_mpg} MPG
             </p>
           </div>
         </div>
