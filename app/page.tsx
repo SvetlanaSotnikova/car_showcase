@@ -36,7 +36,7 @@ export default async function Home() {
         ) : (
           <div className="home__error-container">
             <h2 className="text-black text-xl font-bold">no cars here :(</h2>
-            <p>{allcars?.message}</p>
+            {/* <p>{allcars?.message}</p> */}
           </div>
         )}
       </div>
