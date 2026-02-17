@@ -1,21 +1,49 @@
+"use client";
+
 import { CarCard, CustomFilter, Hero, SearchBar, ShowMore } from "@/components";
-import { HomeProps } from "@/types";
+import { CarProps, HomeProps } from "@/types";
 import { fetchCars } from "@/utils";
 import Image from "next/image";
 import { fuels, yearsOfProduction } from "@/contents";
+import { useEffect, useState } from "react";
 
-export default async function Home({ searchParams }: HomeProps) {
-  const params = await searchParams;
+export default function Home() {
+  const [allcars, setAllCars] = useState<CarProps[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  const allcars = await fetchCars({
-    manufacturer: params.manufacturer || "toyota", // используем params
-    year: params?.year ? Number(params.year) : 2020,
-    fuel: params.fuel || "gas",
-    // limit: params.limit || 10,
-    model: params.model || "corolla",
-  });
-  console.log("Fetched cars:", allcars);
-  const isDataEmpty = !Array.isArray(allcars) || allcars.length < 1 || !allcars;
+  // search states
+  const [manufacturer, setManuFacturer] = useState("");
+  const [model, setModel] = useState("");
+
+  // filter states
+  const [fuel, setFuel] = useState("");
+  const [year, setYear] = useState<number | undefined>(undefined);
+
+  // limit state
+  const [limit, setLimit] = useState(10);
+
+  const getCars = async () => {
+    setLoading(true);
+    try {
+      const params = await fetchCars({
+        manufacturer: manufacturer || "mercedes-benz", // используем дефолтное значение
+        year: year || 2020,
+        fuel: fuel,
+        model: model || "",
+      });
+
+      setAllCars(params);
+      console.log("Fetched cars:", params);
+    } catch {
+      console.error();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getCars();
+  }, [fuel, year, limit, manufacturer, model]);
 
   return (
     <main className="overflow-hidden">
@@ -26,34 +54,51 @@ export default async function Home({ searchParams }: HomeProps) {
           <p>Explore out cars you might like</p>
         </div>
         <div className="home__filters">
-          <SearchBar />
+          <SearchBar setManufacturer={setManuFacturer} setModel={setModel} />
           <div className="home__filter-container">
-            <CustomFilter title="fuel" options={fuels} />
-            <CustomFilter title="year" options={yearsOfProduction} />
+            <CustomFilter title="fuel" options={fuels} setFilter={setFuel} />
+            <CustomFilter
+              title="year"
+              options={yearsOfProduction}
+              setFilter={(value: string) => setYear(Number(value))}
+            />
           </div>
         </div>
 
-        {!isDataEmpty ? (
+        {allcars.length > 0 ? (
           <section>
             <div className="home__cars-wrapper">
               {allcars?.map((car, index) => (
-                <CarCard
-                  key={`${car.make}-${car.model}-${car.year}-${index}`}
-                  car={car}
-                />
+                <CarCard key={`$${model}-${year}-${index}`} car={car} />
               ))}
               {/* <CarsList cars={allcars} /> */}
             </div>
+
+            {loading && (
+              <div className="mt-16 w-full flex-center">
+                <Image
+                  src="./loader.svg"
+                  alt="loader"
+                  width={50}
+                  height={50}
+                  className="object-contain"
+                />
+              </div>
+            )}
+
             <ShowMore
-              pageNumber={(params.limit || 10) / 10}
-              isNext={(params.limit || 10) > allcars.length}
+              pageNumber={limit / 10}
+              isNext={limit > allcars.length}
+              setLimit={setLimit}
             />
           </section>
         ) : (
-          <div className="home__error-container">
-            <h2 className="text-black text-xl font-bold">no cars here :(</h2>
-            {/* <p>{allcars?.message}</p> */}
-          </div>
+          !loading && (
+            <div className="home__error-container">
+              <h2 className="text-black text-xl font-bold">no cars here :(</h2>
+              {/* <p>{allcars?.message}</p> */}
+            </div>
+          )
         )}
       </div>
     </main>
