@@ -57,7 +57,7 @@ const updateSearchParams = (model: string, manufacturer: string) => {
   };
 
 return (
-    <form action="" className="searchbar" onSubmit={handleSearch}>
+    <form className="searchbar" onSubmit={handleSearch}>
       <div className="searchbar__item">
         <SearchManufactures
           manufacturer={manufacturer}

@@ -1,17 +1,35 @@
-import { CarProps } from "@/types";
+import { CarProps, FilterProps } from "@/types";
 
-export async function fetchCars() {
+export async function fetchCars(filters: FilterProps) {
+  const { manufacturer, year, model, fuel } = filters;
+
   const headers = {
     "x-rapidapi-key": "2af44fbff8mshda7ecbd3a0b897fp14d151jsn736ba2538893",
     "x-rapidapi-host": "cars-by-api-ninjas.p.rapidapi.com",
   };
 
+  // The limit parameter is for premium users only.
+  const params = new URLSearchParams();
+  // if (manufacturer) params.append("make", manufacturer);
+  // if (year) params.append("year", year.toString());
+  // if (model) params.append("model", model);
+  // if (limit) params.append("limit", limit.toString());
+  // if (fuel) params.append("fuel_type", fuel);
+
+  // we can use omly these params as a free users ((((
+  if (manufacturer) params.append("make", manufacturer);
+  if (year) params.append("year", year.toString());
+  if (model) params.append("model", model);
+  if (fuel) params.append("fuel_type", fuel);
+
   const response = await fetch(
-    "https://cars-by-api-ninjas.p.rapidapi.com/v1/cars?model=q3",
-    { headers: headers },
+   `https://cars-by-api-ninjas.p.rapidapi.com/v1/cars?${params.toString()}`,
+    { headers: headers }
   );
 
   const result = await response.json();
+  console.log("API Response:", result);
+
   return Array.isArray(result) ? result.map(sanitizeCarData) : [];
 }
 
@@ -50,18 +68,42 @@ export const sanitizeCarData = (car: CarProps) => ({
   year: toNumberOrDefault(car.year, 2020),
 });
 
-
 export const generateCarImageUrl = (car: CarProps, angle?: string) => {
   const url = new URL("https://cdn.imagin.studio/getimage");
   const { make, model, year } = car;
 
-  url.searchParams.append('customer', process.env.NEXT_PUBLIC_IMAGIN_API_KEY || '');
-  url.searchParams.append('make', make);
-  url.searchParams.append('modelFamily', model.split(" ")[0]);
-  url.searchParams.append('zoomType', 'fullscreen');
-  url.searchParams.append('modelYear', `${year}`);
+  url.searchParams.append(
+    "customer",
+    process.env.NEXT_PUBLIC_IMAGIN_API_KEY || "",
+  );
+  url.searchParams.append("make", make);
+  url.searchParams.append("modelFamily", model.split(" ")[0]);
+  url.searchParams.append("zoomType", "fullscreen");
+  url.searchParams.append("modelYear", `${year}`);
   // url.searchParams.append('zoomLevel', zoomLevel);
-  url.searchParams.append('angle', `${angle}`);
+  url.searchParams.append("angle", `${angle}`);
 
   return `${url}`;
-} 
+};
+
+export const updateSearchParams = (type: string, value: string) => {
+  // // Get the current URL search params
+  const searchParams = new URLSearchParams(window.location.search);
+
+  searchParams.set(type, value);
+
+  // const newPathname = `${window.location.pathname}?${searchParams.toString()}`;
+
+  return `${window.location.pathname}?${searchParams.toString()}`;
+};
+
+export const deleteSearchParams = (type: string) => {
+  // Set the specified search parameter to the given value
+  const newSearchParams = new URLSearchParams(window.location.search);
+
+  newSearchParams.delete(type.toLocaleLowerCase());
+
+  const newPathname = `${window.location.pathname}?${newSearchParams.toString()}`;
+
+  return newPathname;
+};
