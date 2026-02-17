@@ -1,12 +1,15 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   images: {
-    domains: ["cdn.imagin.studio"],
-  },
-  typescript: {
-    ignoreBuildErrors: true,
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'cdn.imagin.studio',
+        port: '',
+        pathname: '/**',
+      },
+    ],
   },
 };
 
-export default nextConfig;
+module.exports = nextConfig;
