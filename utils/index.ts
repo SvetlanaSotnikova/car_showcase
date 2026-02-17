@@ -7,7 +7,7 @@ export async function fetchCars() {
   };
 
   const response = await fetch(
-    "https://cars-by-api-ninjas.p.rapidapi.com/v1/cars?model=corolla",
+    "https://cars-by-api-ninjas.p.rapidapi.com/v1/cars?model=q3",
     { headers: headers },
   );
 
@@ -16,10 +16,10 @@ export async function fetchCars() {
 }
 
 export const calculateCarRent = (city_mpg: number, year: number) => {
-  const mpg = Number(city_mpg);
-  const carYear = Number(year);
+  // const mpg = Number(city_mpg);
+  // const carYear = Number(year);
 
-  if (isNaN(mpg) || isNaN(carYear)) return "50";
+  // if (isNaN(mpg) || isNaN(carYear)) return "50";
 
   const basePricePerDay = 50;
   const mileageFactor = 0.1;
