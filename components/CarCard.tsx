@@ -34,28 +34,22 @@ const CarCard = ({ car }: CarCardProps) => {
     const docId = `${user.uid}_${carId}`;
     const docRef = doc(db, "likedCars", docId);
 
-    const snapshot = await getDoc(docRef);
-
     try {
+      const snapshot = await getDoc(docRef);
       if (snapshot.exists()) {
         // если уже лайкнута — удаляем
         await deleteDoc(docRef);
         setIsLiked(false);
       } else {
         // если не лайкнута — добавляем
-        setIsLiked(true);
         await setDoc(docRef, {
+          ...car,
           userId: user.uid,
           carId,
-          make: car.make,
-          model: car.model,
-          year: car.year,
-          city_mpg: car.city_mpg,
-          transmission: car.transmission,
-          drive: car.drive,
           imageUrl: generateCarImageUrl(car),
-          createdAt: new Date().toISOString(),
+          createdAt: serverTimestamp(),
         });
+        setIsLiked(true);
       }
     } finally {
       setIsLoading(false);
