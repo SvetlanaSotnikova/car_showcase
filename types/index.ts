@@ -83,3 +83,9 @@ export interface SearchBarProps {
   setManufacturer: (value: string) => void;
   setModel: (value: string) => void;
 };
+
+export interface LikedCar extends CarProps {
+  userId: string;
+  carId: string;
+  imageUrl: string;
+}

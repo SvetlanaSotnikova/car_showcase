@@ -1,10 +1,19 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { CarProps } from "@/types";
 import CustomButton from "./CustomButton";
 import { calculateCarRent, generateCarImageUrl } from "@/utils";
 import CarDetails from "./CarDetails";
+import { useAuth } from "@/contents/AuthContext";
+import {
+  doc,
+  setDoc,
+  deleteDoc,
+  getDoc,
+  serverTimestamp,
+} from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 interface CarCardProps {
   car: CarProps;
@@ -13,6 +22,60 @@ interface CarCardProps {
 const CarCard = ({ car }: CarCardProps) => {
   const { city_mpg, year, make, model, transmission, drive } = car;
   const [isOpen, setIsOpen] = useState(false);
+  const { user } = useAuth();
+  const [isLiked, setIsLiked] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleLike = async () => {
+    if (!user || isLoading) return;
+    setIsLoading(true);
+
+    const carId = `${car.make}-${car.model}-${car.year}`;
+    const docId = `${user.uid}_${carId}`;
+    const docRef = doc(db, "likedCars", docId);
+
+    const snapshot = await getDoc(docRef);
+
+    try {
+      if (snapshot.exists()) {
+        // если уже лайкнута — удаляем
+        await deleteDoc(docRef);
+        setIsLiked(false);
+      } else {
+        // если не лайкнута — добавляем
+        setIsLiked(true);
+        await setDoc(docRef, {
+          userId: user.uid,
+          carId,
+          make: car.make,
+          model: car.model,
+          year: car.year,
+          city_mpg: car.city_mpg,
+          transmission: car.transmission,
+          drive: car.drive,
+          imageUrl: generateCarImageUrl(car),
+          createdAt: new Date().toISOString(),
+        });
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const checkIfLiked = async () => {
+      if (!user) return;
+
+      const carId = `${car.make}-${car.model}-${car.year}`;
+      const docId = `${user.uid}_${carId}`;
+      const docRef = doc(db, "likedCars", docId);
+
+      const snapshot = await getDoc(docRef);
+      setIsLiked(snapshot.exists());
+    };
+
+    checkIfLiked();
+  }, [user, car]);
 
   const carRent = calculateCarRent(city_mpg, year);
   return (
@@ -21,6 +84,9 @@ const CarCard = ({ car }: CarCardProps) => {
         <h2 className="car-card__content-title">
           {make} {model}
         </h2>
+        <button disabled={isLoading} onClick={handleLike}>
+          {isLiked ? "❤️" : "🤍"}
+        </button>
       </div>
       <p className="flex mt-6 text-[32px] font-extrabold">
         <span className="self-start text-[14px] font-semibold">$</span>
