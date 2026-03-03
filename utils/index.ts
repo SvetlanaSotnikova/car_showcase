@@ -89,6 +89,7 @@ const toNumberOrDefault = (value: unknown, defaultValue: number = 0) => {
 };
 
 export const sanitizeCarData = (car: CarProps) => ({
+  price: car.price || Math.floor(Math.random() * 120) + 80,
   city_mpg: toNumberOrDefault(car.city_mpg, 20),
   class: car.class ?? "N/A",
   combination_mpg: toNumberOrDefault(car.combination_mpg, 25),

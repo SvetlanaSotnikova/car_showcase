@@ -20,7 +20,7 @@ interface CarCardProps {
 }
 
 const CarCard = ({ car }: CarCardProps) => {
-  const { city_mpg, year, make, model, transmission, drive } = car;
+  const { city_mpg, year, make, model, transmission, drive, price } = car;
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useAuth();
   const [isLiked, setIsLiked] = useState(false);
@@ -46,7 +46,7 @@ const CarCard = ({ car }: CarCardProps) => {
           ...car,
           userId: user.uid,
           carId,
-          imageUrl: generateCarImageUrl(car),
+          // imageUrl: generateCarImageUrl(car),
           createdAt: serverTimestamp(),
         });
         setIsLiked(true);
@@ -71,7 +71,8 @@ const CarCard = ({ car }: CarCardProps) => {
     checkIfLiked();
   }, [user, car]);
 
-  const carRent = calculateCarRent(city_mpg, year);
+  // const carRent = calculateCarRent(city_mpg, year);
+  const carPrice = car.price;
   return (
     <div className="car-card group">
       <div className="car-card__content">
@@ -84,7 +85,7 @@ const CarCard = ({ car }: CarCardProps) => {
       </div>
       <p className="flex mt-6 text-[32px] font-extrabold">
         <span className="self-start text-[14px] font-semibold">$</span>
-        {carRent}
+        {carPrice}k
         <span className="self-end text-[14px] font-medium">/day</span>
       </p>
       <div className="relative w-full h-40 my-3 object-contain">
