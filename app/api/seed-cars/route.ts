@@ -1,7 +1,10 @@
-// import { NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 // import { collection, doc, setDoc } from "firebase/firestore";
 // import { db } from "@/lib/firebase";
 // import { manufacturers } from "@/contents";
+export async function GET() {
+  return NextResponse.json({ message: "This endpoint is disabled" }, { status: 404 });
+}
 
 // const years = [2017, 2018, 2019, 2020, 2021, 2023];
 
