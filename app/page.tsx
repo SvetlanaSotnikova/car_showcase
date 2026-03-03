@@ -26,10 +26,11 @@ export default function Home() {
     setLoading(true);
     try {
       const params = await fetchCars({
-        manufacturer: manufacturer || "mercedes-benz", // используем дефолтное значение
-        year: year || 2020,
-        fuel: fuel,
-        model: model || "",
+        manufacturer, // используем дефолтное значение
+        year,
+        fuel,
+        model,
+        limit,
       });
 
       setAllCars(params);
