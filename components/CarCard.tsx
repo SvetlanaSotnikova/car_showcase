@@ -80,7 +80,21 @@ const CarCard = ({ car }: CarCardProps) => {
           {make} {model}
         </h2>
         <button disabled={isLoading} onClick={handleLike}>
-          {isLiked ? "❤️" : "🤍"}
+          {isLiked ? (
+            <Image
+              src="/heart-filled.svg"
+              width={25}
+              height={20}
+              alt="heart-filled"
+            />
+          ) : (
+            <Image
+              src="/heart-outline.svg"
+              width={25}
+              height={20}
+              alt="heart-outline"
+            />
+          )}
         </button>
       </div>
       <p className="flex mt-6 text-[32px] font-extrabold">
@@ -94,6 +108,7 @@ const CarCard = ({ car }: CarCardProps) => {
           src={generateCarImageUrl(car)}
           alt="car model"
           priority
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           className="object-contain"
         />
       </div>
@@ -105,17 +120,30 @@ const CarCard = ({ car }: CarCardProps) => {
               width={20}
               height={20}
               alt="steering wheel"
+              style={{ width: "auto", height: "auto" }}
             />
             <p className="text-[14px] leading-[17px]">
               {transmission === "a" ? "Automatic" : "Manual"}
             </p>
           </div>
           <div className="flex flex-col justify-center items-center gap-2">
-            <Image src="/tire.svg" width={20} height={20} alt="tire" />
+            <Image
+              src="/tire.svg"
+              width={20}
+              height={20}
+              alt="tire"
+              style={{ width: "auto", height: "auto" }}
+            />
             <p className="text-[14px]">{drive.toUpperCase()}</p>
           </div>
           <div className="flex flex-col justify-center items-center gap-2">
-            <Image src="/gas.svg" width={20} height={20} alt="gas" />
+            <Image
+              src="/gas.svg"
+              width={20}
+              height={20}
+              alt="gas"
+              style={{ width: "auto", height: "auto" }}
+            />
             <p className="text-[14px] leading-[17px]">{city_mpg} MPG</p>
           </div>
         </div>

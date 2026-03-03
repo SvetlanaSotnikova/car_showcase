@@ -26,7 +26,7 @@ export default function Home() {
     setLoading(true);
     try {
       const params = await fetchCars({
-        manufacturer, // используем дефолтное значение
+        manufacturer,
         year,
         fuel,
         model,

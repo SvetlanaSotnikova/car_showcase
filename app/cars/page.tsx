@@ -43,7 +43,7 @@ useEffect(() => {
         <div className="home__text-container">
           <h1>{user.email}</h1>
           <h1 className="text-4xl font-extrabold">Your favourite cars</h1>
-          <div className="grid grid-cols-3 gap-4">    
+          <div className="home__cars-wrapper">    
             {likedCars.map((car, index) => (
               <CarCard key={index} car={car} />
             ))}
