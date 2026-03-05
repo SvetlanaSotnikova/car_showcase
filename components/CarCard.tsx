@@ -34,7 +34,7 @@ const CarCard = ({ car, selectable, selected, onSelect }: CarCardProps) => {
     setIsLoading(true);
 
     // const carId = car.id;
-    const carId = car.id || `${car.make}-${car.model}-${car.year}`;
+    const carId = car.id || `${car.make}-${car.model}-${car.year}-${car.fuel_type}`;
     const docId = `${user.uid}_${carId}`;
     const docRef = doc(db, "likedCars", docId);
 
@@ -63,7 +63,7 @@ const CarCard = ({ car, selectable, selected, onSelect }: CarCardProps) => {
     const checkIfLiked = async () => {
       if (!user) return;
 
-      const carId = `${car.make}-${car.model}-${car.year}`;
+      const carId = `${car.make}-${car.model}-${car.year}-${car.fuel_type}`;
       const docId = `${user.uid}_${carId}`;
       const docRef = doc(db, "likedCars", docId);
 

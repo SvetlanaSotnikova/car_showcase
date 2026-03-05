@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import CarCard from "@/components/CarCard";
-import { LikedCar } from "@/types";
+import { CarProps, LikedCar } from "@/types";
 import { CustomButton } from "@/components";
 
 export default function ProfilePage() {
@@ -15,7 +15,6 @@ export default function ProfilePage() {
   const [likedCars, setLikedCars] = useState<LikedCar[]>([]);
   const [selectedCars, setSelectedCars] = useState<string[]>([]);
   const [selectMode, setSelectMode] = useState(false);
-  // const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -43,13 +42,11 @@ export default function ProfilePage() {
 
   const toggleCarSelection = (carId: string) => {
     setSelectedCars((prev) =>
-      prev.includes(carId)
-        ? prev.filter((id) => id != carId)
-        : [...prev, carId],
-    );
+    prev.includes(carId)
+      ? prev.filter((id) => id !== carId)
+      : [...prev, carId]
+  );
   };
-
-
 
   return (
     <section className="overflow-hidden">
@@ -83,7 +80,7 @@ export default function ProfilePage() {
                     textStyles="font-bold"
                     rightIcon="/arrow-right-circle-fill.svg"
                     handleClick={() =>
-                      router.push(`/order?cars=${selectedCars.join(",")}`)
+                      router.push(`/order?cars=${encodeURIComponent(selectedCars.join(","))}`)
                     }
                   />
                 )}
@@ -92,9 +89,9 @@ export default function ProfilePage() {
           </div>
 
           <div className="home__cars-wrapper">
-            {likedCars.map((car, index) => (
+            {likedCars.map((car) => (
               <CarCard
-                key={index}
+                key={car.carId || `${car.make}-${car.model}-${car.year}-${car.fuel_type}`}
                 car={car}
                 selectable={selectMode}
                 selected={selectedCars.includes(car.carId)}

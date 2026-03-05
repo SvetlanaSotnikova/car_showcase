@@ -10,7 +10,8 @@ export default function OrderContent() {
   const params = useSearchParams();
   const router = useRouter();
   const { user } = useAuth();
-  const cars = params.get("cars")?.split(",") || [];
+  const raw = params.get("cars") ?? "";
+const cars = raw ? decodeURIComponent(raw).split(",").filter(Boolean) : [];
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [name, setName] = useState("");
@@ -28,8 +29,9 @@ export default function OrderContent() {
     const parts = car.split("-");
     return {
       make: parts[0],
-      year: parts[parts.length - 1],
-      model: parts.slice(1, -1).join(" "),
+      year: parts[parts.length - 2],
+      model: parts.slice(1, -2).join(" "),
+      fuel_type: parts[parts.length - 1]
     };
   });
   const handleSubmit = async (e: React.FormEvent) => {
@@ -63,14 +65,16 @@ export default function OrderContent() {
           <h1 className="text-3xl font-bold">Order request</h1>
           <div className="mb-8">
             <h2 className="mt-8 text-xl font-semibold mb-4">Selected cars:</h2>
+           {/* template variant */}
             {cars.map((car) => {
               const parts = car.split("-");
               const make = parts[0];
-              const year = parts[parts.length - 1]; 
-              const model = parts.slice(1, -1).join(" "); 
+              const year = parts[parts.length - 2]; 
+              const model = parts.slice(1, -2).join(" "); 
+              const fuel_type= parts[parts.length - 1]
               return (
                 <p key={car} className="p-2 bg-gray-50 rounded-lg mb-2">
-                  {make} {model} ({year})
+                  {make} {model} ({year} {fuel_type})
                 </p>
               );
             })}

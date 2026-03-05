@@ -21,6 +21,7 @@ export async function POST(req: Request) {
           <td style="padding:8px;border-bottom:1px solid #eee;">${car.make}</td>
           <td style="padding:8px;border-bottom:1px solid #eee;">${car.model}</td>
           <td style="padding:8px;border-bottom:1px solid #eee;">${car.year}</td>
+          <td style="padding:8px;border-bottom:1px solid #eee;">${car.fuel_type}</td>
         </tr>
       `,
       )
@@ -61,6 +62,7 @@ export async function POST(req: Request) {
                   <th style="padding:10px;text-align:left;">Make</th>
                   <th style="padding:10px;text-align:left;">Model</th>
                   <th style="padding:10px;text-align:left;">Year</th>
+                  <th style="padding:10px;text-align:left;">Fuel Type</th>
                 </tr>
               </thead>
               <tbody>
