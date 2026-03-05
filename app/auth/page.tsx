@@ -115,7 +115,8 @@ export default function AuthPage() {
   };
 
   return (
-    <section className="padding-x padding-y max-width">
+    <section className="overflow-hidden">
+      <div className="mt-12 padding-x padding-y max-width">
       <div className="mx-auto max-w-md bg-white p-6 rounded-lg shadow-md space-y-4">
         <h1 className="text-2xl font-bold text-center">
           {isRegister ? "Register" : "Login"}
@@ -184,6 +185,7 @@ export default function AuthPage() {
         >
           {isRegister ? "Already have an account?" : "Don't have an account?"}
         </p>
+      </div>
       </div>
     </section>
   );
