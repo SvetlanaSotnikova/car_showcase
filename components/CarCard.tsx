@@ -148,7 +148,7 @@ const CarCard = ({ car, selectable, selected, onSelect }: CarCardProps) => {
               alt="tire"
               style={{ width: "auto", height: "auto" }}
             />
-            <p className="text-[14px]">{drive.toUpperCase()}</p>
+            <p className="text-[14px]">{drive?.toUpperCase()}</p>
           </div>
           <div className="flex flex-col justify-center items-center gap-2">
             <Image

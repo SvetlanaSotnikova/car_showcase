@@ -77,8 +77,9 @@ export default function ProfilePage() {
                 {selectedCars.length > 0 && (
                   <CustomButton
                     title="Continue order"
-                    containerStyles="border-2 rounded-3xl bg-emerald-200"
+                    containerStyles="flex gap-2 items-center border-2 rounded-3xl bg-emerald-200"
                     textStyles="font-bold"
+                    rightIcon="/arrow-right-circle-fill.svg"
                     handleClick={() =>
                       router.push(`/order?cars=${selectedCars.join(",")}`)
                     }
