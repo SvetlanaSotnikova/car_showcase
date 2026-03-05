@@ -21,7 +21,6 @@ export async function POST(req: Request) {
           <td style="padding:8px;border-bottom:1px solid #eee;">${car.make}</td>
           <td style="padding:8px;border-bottom:1px solid #eee;">${car.model}</td>
           <td style="padding:8px;border-bottom:1px solid #eee;">${car.year}</td>
-          <td style="padding:8px;border-bottom:1px solid #eee;">${car.fuel_type}</td>
         </tr>
       `,
       )

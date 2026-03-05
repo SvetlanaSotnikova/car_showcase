@@ -9,6 +9,7 @@ import CarCard from "./CarCard";
 import CarDetails from "./CarDetails";
 import ShowMore from "./ShowMore";
 // import CarsList from "./CarsList";
+import OrderContent from "./OrderContent";
 
 export {
     Hero,
@@ -21,5 +22,6 @@ export {
     CarCard,
     CarDetails,
     ShowMore,
+    OrderContent,
     // CarsList
 }
