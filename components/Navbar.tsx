@@ -104,7 +104,7 @@ const Navbar = () => {
                       onClick={() => setIsDropdownOpen(false)}
                     >
                       <Image
-                        src="/arrow-left.svg"
+                        src="/arrow-left-circle-fill.svg"
                         alt="arrow left"
                         width={17}
                         height={17}
