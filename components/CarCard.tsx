@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { CarProps } from "@/types";
 import CustomButton from "./CustomButton";
-import { calculateCarRent, generateCarImageUrl } from "@/utils";
+import { generateCarImageUrl } from "@/utils";
 import CarDetails from "./CarDetails";
 import { useAuth } from "@/contents/AuthContext";
 import {
@@ -17,9 +17,12 @@ import { db } from "@/lib/firebase";
 
 interface CarCardProps {
   car: CarProps;
+  selectable?: boolean;
+  selected?: boolean;
+  onSelect?: () => void;
 }
 
-const CarCard = ({ car }: CarCardProps) => {
+const CarCard = ({ car, selectable, selected, onSelect }: CarCardProps) => {
   const { city_mpg, year, make, model, transmission, drive, price } = car;
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useAuth();
@@ -30,7 +33,8 @@ const CarCard = ({ car }: CarCardProps) => {
     if (!user || isLoading) return;
     setIsLoading(true);
 
-    const carId = car.id;
+    // const carId = car.id;
+    const carId = `${car.make}-${car.model}-${car.year}`;
     const docId = `${user.uid}_${carId}`;
     const docRef = doc(db, "likedCars", docId);
 
@@ -45,6 +49,10 @@ const CarCard = ({ car }: CarCardProps) => {
         await setDoc(docRef, {
           userId: user.uid,
           carId,
+          make: car.make,
+          model: car.model,
+          year: car.year,
+          price: car.price,
           createdAt: serverTimestamp(),
         });
         setIsLiked(true);
@@ -72,8 +80,16 @@ const CarCard = ({ car }: CarCardProps) => {
   // const carRent = calculateCarRent(city_mpg, year);
   const carPrice = car.price;
   return (
-    <div className="car-card group">
+    <div className="car-card group relative">
       <div className="car-card__content">
+        {selectable && (
+          <input
+            type="checkbox"
+            checked={selected}
+            onChange={onSelect}
+            className="absolute top-3 right-3 w-5 h-5"
+          />
+        )}
         <h2 className="car-card__content-title">
           {make} {model}
         </h2>

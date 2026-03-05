@@ -89,7 +89,9 @@ export const sanitizeCarData = (car: CarProps) => ({
 
 export const generateCarImageUrl = (car: CarProps, angle?: string) => {
   const { make, model, year } = car;
-
+  // if (!make || !model || !year) {
+  //   return "/placeholder-car.jpg"; 
+  // }
   // Use imagin.studio with the free public customer key
   const url = new URL("https://cdn.imagin.studio/getimage");
   url.searchParams.append("customer", "hrjavascript-mastery");
