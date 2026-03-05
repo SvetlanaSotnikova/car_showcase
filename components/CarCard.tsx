@@ -34,7 +34,7 @@ const CarCard = ({ car, selectable, selected, onSelect }: CarCardProps) => {
     setIsLoading(true);
 
     // const carId = car.id;
-    const carId = `${car.make}-${car.model}-${car.year}`;
+    const carId = car.id || `${car.make}-${car.model}-${car.year}`;
     const docId = `${user.uid}_${carId}`;
     const docRef = doc(db, "likedCars", docId);
 
@@ -47,12 +47,9 @@ const CarCard = ({ car, selectable, selected, onSelect }: CarCardProps) => {
       } else {
         // если не лайкнута — добавляем
         await setDoc(docRef, {
+          ...car,
           userId: user.uid,
           carId,
-          make: car.make,
-          model: car.model,
-          year: car.year,
-          price: car.price,
           createdAt: serverTimestamp(),
         });
         setIsLiked(true);
@@ -148,7 +145,7 @@ const CarCard = ({ car, selectable, selected, onSelect }: CarCardProps) => {
               alt="tire"
               style={{ width: "auto", height: "auto" }}
             />
-            <p className="text-[14px]">{drive?.toUpperCase()}</p>
+            <p className="text-[14px]">{drive?.toUpperCase() ?? "N/A"}</p>
           </div>
           <div className="flex flex-col justify-center items-center gap-2">
             <Image

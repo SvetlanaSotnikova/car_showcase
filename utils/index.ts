@@ -79,7 +79,7 @@ export const sanitizeCarData = (car: CarProps) => ({
   cylinders: toNumberOrDefault(car.cylinders, 4),
   displacement: toNumberOrDefault(car.displacement, 1500),
   drive: car.drive ?? "N/A",
-  fuel_type: car.fuel_type ?? "N/A",
+  fuel_type: car.fuel_type,
   highway_mpg: toNumberOrDefault(car.highway_mpg, 30),
   make: car.make ?? "N/A",
   model: car.model ?? "N/A",
