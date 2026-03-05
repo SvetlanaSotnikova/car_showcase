@@ -1,79 +1,62 @@
 import { CarProps, FilterProps } from "@/types";
 import { db } from "@/lib/firebase";
-import { collection, query, where, limit as firestoreLimit, getDocs} from "firebase/firestore";
-
-// export async function fetchCars(filters: FilterProps) {
-//   const { manufacturer, year, model, fuel } = filters;
-
-//   const headers = {
-//     "x-rapidapi-key": process.env.NEXT_PUBLIC_RAPIDAPI_KEY!,
-//     "x-rapidapi-host": "cars-by-api-ninjas.p.rapidapi.com",
-//   };
-
-//   // The limit parameter is for premium users only.
-//   const params = new URLSearchParams();
-//   // if (manufacturer) params.append("make", manufacturer);
-//   // if (year) params.append("year", year.toString());
-//   // if (model) params.append("model", model);
-//   // if (limit) params.append("limit", limit.toString());
-//   // if (fuel) params.append("fuel_type", fuel);
-
-//   // we can use omly these params as a free users ((((
-//   if (manufacturer) params.append("make", manufacturer);
-//   if (year) params.append("year", year.toString());
-//   if (model) params.append("model", model);
-//   if (fuel) params.append("fuel_type", fuel);
-
-//   const response = await fetch(
-//    `https://cars-by-api-ninjas.p.rapidapi.com/v1/cars?${params.toString()}`,
-//     { headers: headers }
-//   );
-
-//   const result = await response.json();
-//   console.log("API Response:", result);
-
-//   return Array.isArray(result) ? result.map(sanitizeCarData) : [];
-// }
-
+import {
+  collection,
+  query,
+  where,
+  limit as firestoreLimit,
+  getDocs,
+} from "firebase/firestore";
 
 export async function fetchCars(filters: FilterProps) {
   try {
-    const { manufacturer, year, model, fuel, limit: resultLimit = 10} = filters;
-    
+    const {
+      manufacturer,
+      year,
+      model,
+      fuel,
+      limit: resultLimit = 10,
+    } = filters;
+
     const carsRef = collection(db, "cars");
     const conditions = [];
-    
+
     if (manufacturer) {
       conditions.push(where("make", "==", manufacturer));
     }
-    
+
     if (year) {
       conditions.push(where("year", "==", Number(year)));
     }
-    
+
     if (fuel) {
       conditions.push(where("fuel_type", "==", fuel.toLowerCase()));
     }
-   const q = conditions.length > 0
-      ? query(carsRef, ...conditions, firestoreLimit(resultLimit)) 
-      : query(carsRef, firestoreLimit(resultLimit));
+    const q =
+      conditions.length > 0
+        ? query(carsRef, ...conditions, firestoreLimit(resultLimit))
+        : query(carsRef, firestoreLimit(resultLimit));
 
-      const querySnapshot = await getDocs(q);const cars = querySnapshot.docs.map(doc => doc.data() as CarProps);
+    const querySnapshot = await getDocs(q);
+    const cars = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    })) as CarProps[];
 
     const filteredCars = model
-      ? cars.filter(car => car.model?.toLowerCase().includes(model.toLowerCase()))
+      ? cars.filter((car) =>
+          car.model?.toLowerCase().includes(model.toLowerCase()),
+        )
       : cars;
 
     return filteredCars.map(sanitizeCarData);
-
   } catch (error) {
     console.error("Error fetching cars from Firebase:", error);
     return [];
-  };
+  }
 }
 
 export const calculateCarRent = (city_mpg: number, year: number) => {
-
   const basePricePerDay = 50;
   const mileageFactor = 0.1;
   const ageFactor = 0.05;
@@ -98,15 +81,15 @@ export const sanitizeCarData = (car: CarProps) => ({
   drive: car.drive ?? "N/A",
   fuel_type: car.fuel_type ?? "N/A",
   highway_mpg: toNumberOrDefault(car.highway_mpg, 30),
-  make: car.make ?? "Unknown",
-  model: car.model ?? "Unknown",
+  make: car.make ?? "N/A",
+  model: car.model ?? "N/A",
   transmission: car.transmission ?? "a",
   year: toNumberOrDefault(car.year, 2020),
 });
 
 export const generateCarImageUrl = (car: CarProps, angle?: string) => {
-   const { make, model, year } = car;
-  
+  const { make, model, year } = car;
+
   // Use imagin.studio with the free public customer key
   const url = new URL("https://cdn.imagin.studio/getimage");
   url.searchParams.append("customer", "hrjavascript-mastery");
@@ -140,5 +123,3 @@ export const deleteSearchParams = (type: string) => {
 
   return newPathname;
 };
-
-

@@ -3,7 +3,19 @@ import Image from "next/image";
 import CustomButton from "./CustomButton";
 
 const Hero = () => {
-  const handleScroll = () => {};
+  const handleScroll = () => {
+    const element = document.getElementById('catalogue');
+  if (element) {
+    const offset = 20; 
+    const elementPosition = element.offsetTop - offset;
+    
+    window.scrollTo({
+      top: elementPosition,
+      behavior: 'smooth'
+    });
+  }
+  };
+
   return (
     <div className="hero">
       <div className="flex-1 pt-36 padding-x">

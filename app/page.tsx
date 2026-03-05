@@ -54,7 +54,7 @@ export default function Home() {
           <h1 className="text-4xl font-extrabold">Car Catalogue</h1>
           <p>Explore out cars you might like</p>
         </div>
-        <div className="home__filters">
+        <div id="catalogue" className="home__filters">
           <SearchBar setManufacturer={setManuFacturer} setModel={setModel} />
           <div className="home__filter-container">
             <CustomFilter title="fuel" options={fuels} setFilter={setFuel} />

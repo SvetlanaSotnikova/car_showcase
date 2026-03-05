@@ -30,7 +30,7 @@ const CarCard = ({ car }: CarCardProps) => {
     if (!user || isLoading) return;
     setIsLoading(true);
 
-    const carId = `${car.make}-${car.model}-${car.year}`;
+    const carId = car.id;
     const docId = `${user.uid}_${carId}`;
     const docRef = doc(db, "likedCars", docId);
 
@@ -43,10 +43,8 @@ const CarCard = ({ car }: CarCardProps) => {
       } else {
         // если не лайкнута — добавляем
         await setDoc(docRef, {
-          ...car,
           userId: user.uid,
           carId,
-          // imageUrl: generateCarImageUrl(car),
           createdAt: serverTimestamp(),
         });
         setIsLiked(true);
@@ -99,7 +97,7 @@ const CarCard = ({ car }: CarCardProps) => {
       </div>
       <p className="flex mt-6 text-[32px] font-extrabold">
         <span className="self-start text-[14px] font-semibold">$</span>
-        {carPrice}k
+        {carPrice}
         <span className="self-end text-[14px] font-medium">/day</span>
       </p>
       <div className="relative w-full h-40 my-3 object-contain">
