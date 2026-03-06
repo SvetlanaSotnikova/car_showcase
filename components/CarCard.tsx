@@ -20,9 +20,16 @@ interface CarCardProps {
   selectable?: boolean;
   selected?: boolean;
   onSelect?: () => void;
+  disableLike?: boolean;
 }
 
-const CarCard = ({ car, selectable, selected, onSelect }: CarCardProps) => {
+const CarCard = ({
+  car,
+  selectable,
+  selected,
+  onSelect,
+  disableLike,
+}: CarCardProps) => {
   const { city_mpg, year, make, model, transmission, drive, price } = car;
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useAuth();
@@ -30,11 +37,12 @@ const CarCard = ({ car, selectable, selected, onSelect }: CarCardProps) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLike = async () => {
-    if (!user || isLoading) return;
+    if (!user || isLoading || disableLike) return;
     setIsLoading(true);
 
     // const carId = car.id;
-    const carId = car.id || `${car.make}-${car.model}-${car.year}-${car.fuel_type}`;
+    const carId =
+      car.id || `${car.make}-${car.model}-${car.year}-${car.fuel_type}`;
     const docId = `${user.uid}_${carId}`;
     const docRef = doc(db, "likedCars", docId);
 
@@ -90,7 +98,11 @@ const CarCard = ({ car, selectable, selected, onSelect }: CarCardProps) => {
         <h2 className="car-card__content-title">
           {make} {model}
         </h2>
-        <button disabled={isLoading} onClick={handleLike}>
+        <button
+          disabled={isLoading || disableLike}
+          onClick={handleLike}
+          className={disableLike ? "opacity-40 cursor-not-allowed" : ""}
+        >
           {isLiked ? (
             <Image
               src="/heart-filled.svg"
