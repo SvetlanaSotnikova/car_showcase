@@ -1,7 +1,7 @@
 const content: Record<string, { title: string; text: string }> = {
   privacy: {
     title: "Privacy & Policy",
-    text: "We respect your privacy. We collect only the data necessary to provide our service (email for authentication) and do not share it with third parties, so don't worry, gyes)))",
+    text: "We respect your privacy. We collect only the data necessary to provide our service (email for authentication) and do not share it with third parties, so don't worry, guys)))",
   },
   terms: {
     title: "Terms & Conditions",
