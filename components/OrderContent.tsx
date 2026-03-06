@@ -2,8 +2,9 @@
 
 import { useSearchParams, useRouter } from "next/navigation";
 import { useAuth } from "@/contents/AuthContext";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { CustomButton } from "@/components";
+import { parseCars } from "@/utils";
 // import emailjs from "@emailjs/browser";
 
 export default function OrderContent() {
@@ -11,11 +12,10 @@ export default function OrderContent() {
   const router = useRouter();
   const { user } = useAuth();
   const raw = params.get("cars") ?? "";
-const cars = raw ? decodeURIComponent(raw).split(",").filter(Boolean) : [];
+  const cars = raw ? decodeURIComponent(raw).split(",").filter(Boolean) : [];
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [name, setName] = useState("");
-  //   const [selectedCars, setSelectedCars] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -25,15 +25,8 @@ const cars = raw ? decodeURIComponent(raw).split(",").filter(Boolean) : [];
     }
   }, [user]);
 
-  const parsedCars = cars.map((car) => {
-    const parts = car.split("-");
-    return {
-      make: parts[0],
-      year: parts[parts.length - 2],
-      model: parts.slice(1, -2).join(" "),
-      fuel_type: parts[parts.length - 1]
-    };
-  });
+  const parsedCars = useMemo(() => parseCars(cars), [cars]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !email || !phone) {
@@ -63,21 +56,14 @@ const cars = raw ? decodeURIComponent(raw).split(",").filter(Boolean) : [];
       <div className="mt-12 padding-x padding-y max-width">
         <div className="max-width padding-x padding-y">
           <h1 className="text-3xl font-bold">Order request</h1>
+          <p>Contact us to rent some cars you liked :D</p>
           <div className="mb-8">
             <h2 className="mt-8 text-xl font-semibold mb-4">Selected cars:</h2>
-           {/* template variant */}
-            {cars.map((car) => {
-              const parts = car.split("-");
-              const make = parts[0];
-              const year = parts[parts.length - 2]; 
-              const model = parts.slice(1, -2).join(" "); 
-              const fuel_type= parts[parts.length - 1]
-              return (
-                <p key={car} className="p-2 bg-gray-50 rounded-lg mb-2">
-                  {make} {model} ({year} {fuel_type})
-                </p>
-              );
-            })}
+            {parsedCars.map((car, index) => (
+              <p key={index} className="p-2 bg-gray-50 rounded-lg mb-2">
+                {car.make} {car.model} ({car.year} {car.fuel_type})
+              </p>
+            ))}
           </div>
           <form onSubmit={handleSubmit} className="max-w-md space-y-4">
             <label className="block text-sm font-medium mb-1">Name</label>

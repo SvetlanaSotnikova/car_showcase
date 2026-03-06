@@ -91,3 +91,10 @@ export interface LikedCar extends CarProps {
   carId: string;
   imageUrl: string;
 }
+
+export interface ParsedCar {
+  make: string;
+  model : string;
+  year: string;
+  fuel_type: string;
+}

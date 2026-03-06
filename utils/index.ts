@@ -1,4 +1,4 @@
-import { CarProps, FilterProps } from "@/types";
+import { CarProps, FilterProps, ParsedCar } from "@/types";
 import { db } from "@/lib/firebase";
 import {
   collection,
@@ -89,10 +89,6 @@ export const sanitizeCarData = (car: CarProps) => ({
 
 export const generateCarImageUrl = (car: CarProps, angle?: string) => {
   const { make, model, year } = car;
-  // if (!make || !model || !year) {
-  //   return "/placeholder-car.jpg"; 
-  // }
-  // Use imagin.studio with the free public customer key
   const url = new URL("https://cdn.imagin.studio/getimage");
   url.searchParams.append("customer", "hrjavascript-mastery");
   url.searchParams.append("make", make.split(" ")[0]);
@@ -124,4 +120,16 @@ export const deleteSearchParams = (type: string) => {
   const newPathname = `${window.location.pathname}?${newSearchParams.toString()}`;
 
   return newPathname;
+};
+
+export function parseCars(cars: string[]): ParsedCar[] {
+  return cars.map((car) => {
+    const parts = car.split("-");
+    return {
+      make: parts[0],
+      year: parts[parts.length - 2],
+      model: parts.slice(1, -2).join(" "),
+      fuel_type: parts[parts.length - 1],
+    };
+  });
 };

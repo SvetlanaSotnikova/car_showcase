@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import CarCard from "@/components/CarCard";
-import { CarProps, LikedCar } from "@/types";
+import { LikedCar } from "@/types";
 import { CustomButton } from "@/components";
 
 export default function ProfilePage() {
