@@ -44,7 +44,6 @@ export const manufacturers = [
 
 export const yearsOfProduction = [
   { title: "Year", value: "" },
-  { title: "2015", value: "2015" },
   { title: "2016", value: "2016" },
   { title: "2017", value: "2017" },
   { title: "2018", value: "2018" },
@@ -55,7 +54,6 @@ export const yearsOfProduction = [
   { title: "2023", value: "2023" },
   { title: "2024", value: "2024" },
   { title: "2025", value: "2025" },
-  { title: "2026", value: "2026" },
 ];
 
 export const fuels = [
@@ -86,19 +84,19 @@ export const footerLinks = [
   {
     title: "Company",
     links: [
-      { title: "Events", url: "/" },
-      { title: "Blog", url: "/" },
-      { title: "Podcast", url: "/" },
-      { title: "Invite a friend", url: "/" },
+      { title: "Events", url: "https://ishunea.io/ru" },
+      { title: "Blog", url: "https://ishunea.io/en/portfolio" },
+      { title: "Podcast", url: "https://ishunea.io/ru" },
+      { title: "Invite a friend", url: "https://ishunea.io/ru" },
     ],
   },
   {
     title: "Socials",
     links: [
-      { title: "Discord", url: "/" },
-      { title: "Instagram", url: "/" },
-      { title: "Twitter", url: "/" },
-      { title: "Facebook", url: "/" },
+      { title: "Linkedin", url: "https://www.linkedin.com/company/ishunea/" },
+      { title: "Instagram", url: "https://www.instagram.com/ishunea.io?igsh=MXBxMnI3Y3NrcDlmZg==" },
+      { title: "Twitter", url: "https://twitter.com" },
+      { title: "Facebook", url: "https://www.facebook.com/iShunea.io?mibextid=ZbWKwL" },
     ],
   },
 ];
