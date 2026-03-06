@@ -1,13 +1,19 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
 import { CarProps } from "@/types";
 import CustomButton from "./CustomButton";
 import { generateCarImageUrl } from "@/utils";
 import CarDetails from "./CarDetails";
 import { useAuth } from "@/contents/AuthContext";
-import { doc, setDoc, deleteDoc, serverTimestamp } from "firebase/firestore";
+import {
+  doc,
+  setDoc,
+  deleteDoc,
+  serverTimestamp,
+  getDoc,
+} from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
 interface CarCardProps {
@@ -34,8 +40,20 @@ const CarCard = ({
 
   const carId = useMemo(
     () => car.id || `${car.make}-${car.model}-${car.year}-${car.fuel_type}`,
-    [car]
+    [car],
   );
+
+  useEffect(() => {
+    if (isInitiallyLiked || !user) return;
+
+    const checkIfLiked = async () => {
+      const docRef = doc(db, "likedCars", `${user.uid}_${carId}`);
+      const snapshot = await getDoc(docRef);
+      setIsLiked(snapshot.exists());
+    };
+
+    checkIfLiked();
+  }, [user, carId]);
 
   const handleLike = async () => {
     if (!user || isLoading || disableLike) return;
