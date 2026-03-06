@@ -75,7 +75,7 @@ export default function ProfilePage() {
                 />
                 {selectedCars.length > 0 && (
                   <CustomButton
-                    title="Continue order"
+                    title="Continue "
                     containerStyles="flex gap-2 items-center border-2 rounded-3xl bg-emerald-200 hover:border-lime-200"
                     textStyles="font-bold"
                     rightIcon="/arrow-right-circle-fill.svg"
