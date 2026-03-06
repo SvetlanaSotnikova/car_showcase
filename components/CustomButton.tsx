@@ -9,6 +9,7 @@ const CustomButton = ({
   btnType,
   textStyles,
   rightIcon,
+  iconSize = "w-6 h-6",
 }: CustomButtonProps) => {
   return (
     <button
@@ -19,7 +20,7 @@ const CustomButton = ({
     >
       <span className={`flex-1 ${textStyles}`}>{title}</span>
       {rightIcon && (
-        <div className="relative w-6 h-6">
+        <div className={`relative ${iconSize}`}>
           <Image
             src={rightIcon}
             alt="right icon"

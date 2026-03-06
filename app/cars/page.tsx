@@ -53,21 +53,21 @@ export default function ProfilePage() {
       <div className="mt-12 padding-x padding-y max-width">
         <div className="home__text-container">
           <h1>{user.email}</h1>
-          <div className="flex gap-10 flex-wrap">
+          <div className="flex gap-7 flex-wrap">
             <h1 className="text-4xl font-extrabold">Your favourite cars</h1>
             {!selectMode ? (
               <CustomButton
                 title="Order request"
                 handleClick={() => setSelectMode(!selectMode)}
-                containerStyles="border-2 border-lime-500 rounded-3xl p-2.5"
-                textStyles="font-bold"
+                containerStyles="border border-violet-300 hover:border-lime-500 rounded-full px-3 py-1.5"
+                textStyles="font-bold text-sm"
               />
             ) : (
               <>
                 <CustomButton
                   title="Cancel order :("
-                  containerStyles="border-2 border-red-200 rounded-3xl p-2.5"
-                  textStyles="font-medium"
+                  containerStyles="border border-violet-300 hover:border-red-200 rounded-full px-3 py-1.5"
+                  textStyles="font-medium text-sm"
                   handleClick={() => {
                     setSelectMode(false);
                     setSelectedCars([]);
@@ -76,9 +76,10 @@ export default function ProfilePage() {
                 {selectedCars.length > 0 && (
                   <CustomButton
                     title="Continue order"
-                    containerStyles="flex gap-2 items-center border-2 rounded-3xl bg-emerald-200"
+                    containerStyles="flex gap-2 items-center border-2 rounded-3xl bg-emerald-200 hover:border-lime-200"
                     textStyles="font-bold"
                     rightIcon="/arrow-right-circle-fill.svg"
+                    iconSize="w-4 h-4"
                     handleClick={() =>
                       router.push(`/order?cars=${encodeURIComponent(selectedCars.join(","))}`)
                     }

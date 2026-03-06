@@ -77,10 +77,10 @@ export const footerLinks = [
   {
     title: "About",
     links: [
-      { title: "How it works", url: "/" },
-      { title: "Featured", url: "/" },
-      { title: "Partnership", url: "/" },
-      { title: "Bussiness Relation", url: "/" },
+      { title: "How it works", url: "/about" },
+      { title: "Featured", url: "/about" },
+      { title: "Partnership", url: "/about" },
+      { title: "Bussiness Relation", url: "/about" },
     ],
   },
   {
@@ -100,5 +100,24 @@ export const footerLinks = [
       { title: "Twitter", url: "/" },
       { title: "Facebook", url: "/" },
     ],
+  },
+];
+
+export const aboutSections = [
+  {
+    title: "How it works",
+    text: "Browse our catalogue of cars, filter by fuel type, year, or manufacturer. Click 'View more' on any car to see full details. No registration needed to explore.",
+  },
+  {
+    title: "Featured",
+    text: "We feature a wide range of cars from top manufacturers including Mercedes-Benz, BMW, Audi, Tesla and more — from classic gas-powered vehicles to modern electric cars.",
+  },
+  {
+    title: "Partnership",
+    text: "We work with leading car manufacturers and dealerships to bring you the most up-to-date catalogue. Interested in partnering with us? Reach out via the contact page.",
+  },
+  {
+    title: "Business Relations",
+    text: "CarHub offers business accounts for dealerships and rental companies. Get in touch to discuss how we can help you reach more customers.",
   },
 ];
