@@ -52,7 +52,7 @@ export default function OrderContent() {
     }
   };
   return (
-    <section className="overflow-hidden">
+    <section className="overflow-x-hidden">
       <div className="mt-12 padding-x padding-y max-width">
         <div className="max-width padding-x padding-y">
           <h1 className="text-3xl font-bold">Order request</h1>
