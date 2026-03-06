@@ -9,6 +9,7 @@ import CarCard from "./CarCard";
 import CarDetails from "./CarDetails";
 import ShowMore from "./ShowMore";
 import PhoneField from "./PhoneField";
+import AboutCTA from "./AboutCTA";
 export {
   Hero,
   CustomButton,
@@ -21,5 +22,6 @@ export {
   CarDetails,
   ShowMore,
   PhoneField,
+  AboutCTA,
   // CarsList
 };

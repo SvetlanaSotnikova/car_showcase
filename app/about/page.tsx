@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useAuth } from "@/contents/AuthContext";
 import { aboutSections } from "@/contents";
+import { AboutCTA } from "@/components";
 
 export default function AboutPage() {
   const { user } = useAuth();
@@ -42,21 +43,7 @@ export default function AboutPage() {
               >
                 Browse Cars
               </Link>
-              {user ? (
-                <Link
-                  href="/cars"
-                  className="text-primary-blue bg-white border border-primary-blue rounded-full px-6 py-2.5 font-semibold text-sm hover:bg-blue-50 transition"
-                >
-                  My Cars
-                </Link>
-              ) : (
-                <Link
-                  href="/auth"
-                  className="text-primary-blue bg-white border border-primary-blue rounded-full px-6 py-2.5 font-semibold text-sm hover:bg-blue-50 transition"
-                >
-                  Sign In
-                </Link>
-              )}
+              <AboutCTA/>
             </div>
           </div>
         </div>
