@@ -93,28 +93,29 @@ const CarCard = ({
         <h2 className="car-card__content-title">
           {car.make} {car.model}
         </h2>
-
-        <button
-          disabled={isLoading || disableLike}
-          onClick={handleLike}
-          className={disableLike ? "opacity-40 cursor-not-allowed" : ""}
-        >
-          {isLiked ? (
-            <Image
-              src="/heart-filled.svg"
-              width={25}
-              height={20}
-              alt="heart-filled"
-            />
-          ) : (
-            <Image
-              src="/heart-outline.svg"
-              width={25}
-              height={20}
-              alt="heart-outline"
-            />
-          )}
-        </button>
+        {user && (
+          <button
+            disabled={isLoading || disableLike}
+            onClick={handleLike}
+            className={disableLike ? "opacity-40 cursor-not-allowed" : ""}
+          >
+            {isLiked ? (
+              <Image
+                src="/heart-filled.svg"
+                width={25}
+                height={20}
+                alt="heart-filled"
+              />
+            ) : (
+              <Image
+                src="/heart-outline.svg"
+                width={25}
+                height={20}
+                alt="heart-outline"
+              />
+            )}
+          </button>
+        )}
       </div>
 
       <p className="flex mt-6 text-[32px] font-extrabold">
