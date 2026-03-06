@@ -98,3 +98,7 @@ export interface ParsedCar {
   year: string;
   fuel_type: string;
 }
+export interface PhoneFieldProps  {
+  value: string;
+  onChange: (value: string) => void;
+};

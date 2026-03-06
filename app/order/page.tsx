@@ -1,6 +1,6 @@
 // app/order/page.tsx (серверный компонент)
 import { Suspense } from "react";
-import OrderContent from "@/components/OrderContent";
+import OrderContent from "@/app/order/OrderContent";
 
 export default function OrderPage() {
   return (

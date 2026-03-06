@@ -3,7 +3,7 @@
 import { useSearchParams, useRouter } from "next/navigation";
 import { useAuth } from "@/contents/AuthContext";
 import { useEffect, useState, useMemo } from "react";
-import { CustomButton } from "@/components";
+import { CustomButton, PhoneField } from "@/components";
 import { parseCars } from "@/utils";
 // import emailjs from "@emailjs/browser";
 
@@ -84,14 +84,9 @@ export default function OrderContent() {
               className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-primary-blue focus:border-transparent"
               required
             />
-            <label className="block text-sm font-medium mb-1">Phone</label>
-            <input
-              type="tel"
+            <PhoneField
               value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              placeholder="Phone number"
-              className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-primary-blue focus:border-transparent"
-              required
+              onChange={(value) => setPhone(value)}
             />
             <CustomButton
               title={isSubmitting ? "Submitting..." : "Submit request"}

@@ -8,20 +8,18 @@ import SearchManufactures from "./SearchManufactures";
 import CarCard from "./CarCard";
 import CarDetails from "./CarDetails";
 import ShowMore from "./ShowMore";
-// import CarsList from "./CarsList";
-import OrderContent from "./OrderContent";
-
+import PhoneField from "./PhoneField";
 export {
-    Hero,
-    CustomButton,
-    Navbar,
-    Footer,
-    CustomFilter,
-    SearchBar,
-    SearchManufactures,
-    CarCard,
-    CarDetails,
-    ShowMore,
-    OrderContent,
-    // CarsList
-}
+  Hero,
+  CustomButton,
+  Navbar,
+  Footer,
+  CustomFilter,
+  SearchBar,
+  SearchManufactures,
+  CarCard,
+  CarDetails,
+  ShowMore,
+  PhoneField,
+  // CarsList
+};
