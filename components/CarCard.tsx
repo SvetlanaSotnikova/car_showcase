@@ -1,18 +1,13 @@
 "use client";
-import { useEffect, useState } from "react";
+
+import { useState, useMemo } from "react";
 import Image from "next/image";
 import { CarProps } from "@/types";
 import CustomButton from "./CustomButton";
 import { generateCarImageUrl } from "@/utils";
 import CarDetails from "./CarDetails";
 import { useAuth } from "@/contents/AuthContext";
-import {
-  doc,
-  setDoc,
-  deleteDoc,
-  getDoc,
-  serverTimestamp,
-} from "firebase/firestore";
+import { doc, setDoc, deleteDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
 interface CarCardProps {
@@ -21,39 +16,38 @@ interface CarCardProps {
   selected?: boolean;
   onSelect?: () => void;
   disableLike?: boolean;
+  isInitiallyLiked?: boolean;
 }
 
 const CarCard = ({
   car,
-  selectable,
-  selected,
+  selectable = false,
+  selected = false,
   onSelect,
-  disableLike,
+  disableLike = false,
+  isInitiallyLiked = false,
 }: CarCardProps) => {
-  const { city_mpg, year, make, model, transmission, drive, price } = car;
-  const [isOpen, setIsOpen] = useState(false);
   const { user } = useAuth();
-  const [isLiked, setIsLiked] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isLiked, setIsLiked] = useState(isInitiallyLiked);
   const [isLoading, setIsLoading] = useState(false);
+
+  const carId = useMemo(
+    () => car.id || `${car.make}-${car.model}-${car.year}-${car.fuel_type}`,
+    [car]
+  );
 
   const handleLike = async () => {
     if (!user || isLoading || disableLike) return;
     setIsLoading(true);
 
-    // const carId = car.id;
-    const carId =
-      car.id || `${car.make}-${car.model}-${car.year}-${car.fuel_type}`;
-    const docId = `${user.uid}_${carId}`;
-    const docRef = doc(db, "likedCars", docId);
+    const docRef = doc(db, "likedCars", `${user.uid}_${carId}`);
 
     try {
-      const snapshot = await getDoc(docRef);
-      if (snapshot.exists()) {
-        // если уже лайкнута — удаляем
+      if (isLiked) {
         await deleteDoc(docRef);
         setIsLiked(false);
       } else {
-        // если не лайкнута — добавляем
         await setDoc(docRef, {
           ...car,
           userId: user.uid,
@@ -67,23 +61,6 @@ const CarCard = ({
     }
   };
 
-  useEffect(() => {
-    const checkIfLiked = async () => {
-      if (!user) return;
-
-      const carId = `${car.make}-${car.model}-${car.year}-${car.fuel_type}`;
-      const docId = `${user.uid}_${carId}`;
-      const docRef = doc(db, "likedCars", docId);
-
-      const snapshot = await getDoc(docRef);
-      setIsLiked(snapshot.exists());
-    };
-
-    checkIfLiked();
-  }, [user, car]);
-
-  // const carRent = calculateCarRent(city_mpg, year);
-  const carPrice = car.price;
   return (
     <div className="car-card group relative">
       <div className="car-card__content">
@@ -96,8 +73,9 @@ const CarCard = ({
           />
         )}
         <h2 className="car-card__content-title">
-          {make} {model}
+          {car.make} {car.model}
         </h2>
+
         <button
           disabled={isLoading || disableLike}
           onClick={handleLike}
@@ -120,21 +98,23 @@ const CarCard = ({
           )}
         </button>
       </div>
+
       <p className="flex mt-6 text-[32px] font-extrabold">
         <span className="self-start text-[14px] font-semibold">$</span>
-        {carPrice}
+        {car.price}
         <span className="self-end text-[14px] font-medium">/day</span>
       </p>
+
       <div className="relative w-full h-40 my-3 object-contain">
         <Image
           fill
           src={generateCarImageUrl(car)}
           alt="car model"
-          priority
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           className="object-contain"
         />
       </div>
+
       <div className="relative flex w-full mt-2">
         <div className="flex group-hover:invisible w-full justify-between text-grey">
           <div className="flex flex-col justify-center items-center gap-2">
@@ -146,7 +126,7 @@ const CarCard = ({
               style={{ width: "auto", height: "auto" }}
             />
             <p className="text-[14px] leading-[17px]">
-              {transmission === "a" ? "Automatic" : "Manual"}
+              {car.transmission === "a" ? "Automatic" : "Manual"}
             </p>
           </div>
           <div className="flex flex-col justify-center items-center gap-2">
@@ -157,7 +137,7 @@ const CarCard = ({
               alt="tire"
               style={{ width: "auto", height: "auto" }}
             />
-            <p className="text-[14px]">{drive?.toUpperCase() ?? "N/A"}</p>
+            <p className="text-[14px]">{car.drive?.toUpperCase() ?? "N/A"}</p>
           </div>
           <div className="flex flex-col justify-center items-center gap-2">
             <Image
@@ -167,9 +147,10 @@ const CarCard = ({
               alt="gas"
               style={{ width: "auto", height: "auto" }}
             />
-            <p className="text-[14px] leading-[17px]">{city_mpg} MPG</p>
+            <p className="text-[14px] leading-[17px]">{car.city_mpg} MPG</p>
           </div>
         </div>
+
         <div className="car-card__btn-container">
           <CustomButton
             title="View more.."
@@ -180,6 +161,7 @@ const CarCard = ({
           />
         </div>
       </div>
+
       {isOpen && (
         <CarDetails
           isOpen={isOpen}

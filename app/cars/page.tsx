@@ -97,6 +97,7 @@ export default function ProfilePage() {
                 selected={selectedCars.includes(car.carId)}
                 onSelect={() => toggleCarSelection(car.carId)}
                 disableLike={selectMode}
+                isInitiallyLiked={true}
               />
             ))}
           </div>
