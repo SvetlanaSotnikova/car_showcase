@@ -133,3 +133,7 @@ export function parseCars(cars: string[]): ParsedCar[] {
     };
   });
 };
+
+export const isAdmin = (email?:string | null) => {
+  return email === process.env.NEXT_PUBLIC_ADMIN_EMAIL;
+}

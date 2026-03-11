@@ -5,6 +5,7 @@ import CustomButton from "./CustomButton";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/contents/AuthContext";
 import { useEffect, useRef, useState } from "react";
+import { isAdmin } from "@/utils";
 
 const Navbar = () => {
   const router = useRouter();
@@ -12,7 +13,7 @@ const Navbar = () => {
   const { user, loading, logout } = useAuth();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const isAdmin = user?.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL;
+  const admin = isAdmin(user?.email);
 
   const handleLogout = async () => {
     try {
@@ -127,7 +128,7 @@ const Navbar = () => {
               )}
             </div>
           </div>
-        ) : isAdmin ? (
+        ) : admin ? (
           <Link href="/admin">
             <CustomButton
               title="Admin"

@@ -10,6 +10,9 @@ import CarDetails from "./CarDetails";
 import ShowMore from "./ShowMore";
 import PhoneField from "./PhoneField";
 import AboutCTA from "./AboutCTA";
+import AdminCarsTable from "./AdminCarsTable";
+import AdminLogin from "./AdminLogin";
+
 export {
   Hero,
   CustomButton,
@@ -23,5 +26,7 @@ export {
   ShowMore,
   PhoneField,
   AboutCTA,
+  AdminCarsTable,
+  AdminLogin,
   // CarsList
 };

@@ -2,7 +2,7 @@
 
 import { CarCard, CustomFilter, Hero, SearchBar, ShowMore } from "@/components";
 import { CarProps, HomeProps } from "@/types";
-import { fetchCars } from "@/utils";
+import { fetchCars, isAdmin } from "@/utils";
 import Image from "next/image";
 import { fuels, yearsOfProduction } from "@/contents";
 import { useEffect, useState } from "react";
@@ -26,8 +26,8 @@ export default function Home() {
   // limit state
   const [limit, setLimit] = useState(10);
   const {user} = useAuth();
-  const isAdmin = user?.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL;
-  
+  const admin = isAdmin(user?.email);
+
   const getCars = async () => {
     setLoading(true);
     try {
@@ -87,7 +87,7 @@ export default function Home() {
                     key={`${model}-${year}-${index}`}
                     car={car}
                     isBooked={bookedIds.has(carId)}
-                    disableLike={isAdmin}
+                    disableLike={admin}
                   />
                 );
               })}
