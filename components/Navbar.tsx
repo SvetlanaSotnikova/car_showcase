@@ -12,6 +12,7 @@ const Navbar = () => {
   const { user, loading, logout } = useAuth();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const isAdmin = user?.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL;
 
   const handleLogout = async () => {
     try {
@@ -75,7 +76,7 @@ const Navbar = () => {
           />
         </Link>
 
-        {user ? (
+        {user && !isAdmin ? (
           <div className="flex items-center gap-4">
             <span className="text-gray-600 hidden sm:block">
               Hi, {user.email?.split("@")[0]}! 👋
@@ -87,6 +88,7 @@ const Navbar = () => {
                 handleClick={handleYourCarsClick}
                 containerStyles="text-primary-blue rounded-full bg-white min-w-[130px]"
               />
+
               {pathname === "/cars" && isDropdownOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-20">
                   <div className="px-4 py-3 bg-gray-50 border-b border-gray-100">
@@ -125,6 +127,13 @@ const Navbar = () => {
               )}
             </div>
           </div>
+        ) : isAdmin ? (
+          <Link href="/admin">
+            <CustomButton
+              title="Admin"
+              containerStyles="text-white bg-orange-500 rounded-full min-w-[100px]"
+            />
+          </Link>
         ) : (
           <CustomButton
             title="Sign in"

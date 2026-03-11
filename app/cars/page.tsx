@@ -15,6 +15,7 @@ export default function ProfilePage() {
   const [likedCars, setLikedCars] = useState<LikedCar[]>([]);
   const [selectedCars, setSelectedCars] = useState<string[]>([]);
   const [selectMode, setSelectMode] = useState(false);
+  const [bookedIds, setBookedIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (!loading && !user) {
@@ -38,14 +39,21 @@ export default function ProfilePage() {
     return () => unsubscribe();
   }, [user]);
 
+  useEffect(() => {
+    const unsub = onSnapshot(collection(db, "bookedCars"), (snap) => {
+      setBookedIds(new Set(snap.docs.map((d) => d.id)));
+    });
+    return () => unsub();
+  }, []);
   if (loading || !user) return null;
 
   const toggleCarSelection = (carId: string) => {
+    if (bookedIds.has(carId)) return;
     setSelectedCars((prev) =>
-    prev.includes(carId)
-      ? prev.filter((id) => id !== carId)
-      : [...prev, carId]
-  );
+      prev.includes(carId)
+        ? prev.filter((id) => id !== carId)
+        : [...prev, carId],
+    );
   };
 
   return (
@@ -81,7 +89,9 @@ export default function ProfilePage() {
                     rightIcon="/arrow-right-circle-fill.svg"
                     iconSize="w-4 h-4"
                     handleClick={() =>
-                      router.push(`/order?cars=${encodeURIComponent(selectedCars.join(","))}`)
+                      router.push(
+                        `/order?cars=${encodeURIComponent(selectedCars.join(","))}`,
+                      )
                     }
                   />
                 )}
@@ -90,17 +100,24 @@ export default function ProfilePage() {
           </div>
 
           <div className="home__cars-wrapper">
-            {likedCars.map((car) => (
-              <CarCard
-                key={car.carId || `${car.make}-${car.model}-${car.year}-${car.fuel_type}`}
-                car={car}
-                selectable={selectMode}
-                selected={selectedCars.includes(car.carId)}
-                onSelect={() => toggleCarSelection(car.carId)}
-                disableLike={selectMode}
-                isInitiallyLiked={true}
-              />
-            ))}
+            {likedCars.map((car) => {
+              const isBooked = bookedIds.has(car.carId);
+              return (
+                <CarCard
+                  key={
+                    car.carId ||
+                    `${car.make}-${car.model}-${car.year}-${car.fuel_type}`
+                  }
+                  car={car}
+                  selectable={selectMode && !isBooked}
+                  selected={selectedCars.includes(car.carId)}
+                  onSelect={() => toggleCarSelection(car.carId)}
+                  disableLike={selectMode}
+                  isInitiallyLiked={true}
+                  isBooked={isBooked}
+                />
+              );
+            })}
           </div>
         </div>
       </div>

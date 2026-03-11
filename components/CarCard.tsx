@@ -100,7 +100,7 @@ const CarCard = ({
             Booked
           </span>
         )}
-        {user && (
+        {user &&  !disableLike &&(
           <button
             disabled={isLoading || disableLike}
             onClick={handleLike}

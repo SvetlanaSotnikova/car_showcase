@@ -8,6 +8,7 @@ import { fuels, yearsOfProduction } from "@/contents";
 import { useEffect, useState } from "react";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { useAuth } from "@/contents/AuthContext";
 
 export default function Home() {
   const [allcars, setAllCars] = useState<CarProps[]>([]);
@@ -24,7 +25,9 @@ export default function Home() {
 
   // limit state
   const [limit, setLimit] = useState(10);
-
+  const {user} = useAuth();
+  const isAdmin = user?.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL;
+  
   const getCars = async () => {
     setLoading(true);
     try {
@@ -84,6 +87,7 @@ export default function Home() {
                     key={`${model}-${year}-${index}`}
                     car={car}
                     isBooked={bookedIds.has(carId)}
+                    disableLike={isAdmin}
                   />
                 );
               })}

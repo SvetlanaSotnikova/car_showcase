@@ -35,6 +35,7 @@ export default function AuthPage() {
   // errrors processing
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const isAdmin = user?.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL;
 
   useEffect(() => {
     if (!authLoading && user) {
@@ -86,7 +87,7 @@ export default function AuthPage() {
       } else {
         await signInWithEmailAndPassword(auth, email, password);
       }
-      router.push("/cars");
+      router.push(isAdmin? "/admin" : "/cars");
     } catch (error) {
       const firebaseError = error as FirebaseError;
       setError(getFirebaseError(error));
@@ -99,7 +100,7 @@ export default function AuthPage() {
     try {
       setLoading(true);
       await signInWithPopup(auth, provider);
-      router.push("/cars");
+      router.push(isAdmin? "/admin" : "/cars");
     } catch (error) {
       const firebaseError = error as FirebaseError;
       setError(getFirebaseError(error));
