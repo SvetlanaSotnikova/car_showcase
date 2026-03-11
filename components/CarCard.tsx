@@ -23,6 +23,7 @@ interface CarCardProps {
   onSelect?: () => void;
   disableLike?: boolean;
   isInitiallyLiked?: boolean;
+  isBooked?: boolean;
 }
 
 const CarCard = ({
@@ -32,6 +33,7 @@ const CarCard = ({
   onSelect,
   disableLike = false,
   isInitiallyLiked = false,
+  isBooked = false,
 }: CarCardProps) => {
   const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
@@ -93,6 +95,11 @@ const CarCard = ({
         <h2 className="car-card__content-title">
           {car.make} {car.model}
         </h2>
+        {isBooked && (
+          <span className="absolute top-2 left-2 bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded-full">
+            Booked
+          </span>
+        )}
         {user && (
           <button
             disabled={isLoading || disableLike}

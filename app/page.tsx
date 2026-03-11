@@ -6,10 +6,13 @@ import { fetchCars } from "@/utils";
 import Image from "next/image";
 import { fuels, yearsOfProduction } from "@/contents";
 import { useEffect, useState } from "react";
+import { collection, onSnapshot } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 export default function Home() {
   const [allcars, setAllCars] = useState<CarProps[]>([]);
   const [loading, setLoading] = useState(false);
+  const [bookedIds, setBookedIds] = useState<Set<string>>(new Set());
 
   // search states
   const [manufacturer, setManuFacturer] = useState("");
@@ -45,7 +48,12 @@ export default function Home() {
   useEffect(() => {
     getCars();
   }, [fuel, year, limit, manufacturer, model]);
-
+  useEffect(() => {
+    const unsub = onSnapshot(collection(db, "bookedCars"), (snap) => {
+      setBookedIds(new Set(snap.docs.map((d) => d.id)));
+    });
+    return () => unsub();
+  }, []);
   return (
     <main className="overflow-x-hidden">
       <Hero />
@@ -69,10 +77,16 @@ export default function Home() {
         {allcars.length > 0 ? (
           <section>
             <div className="home__cars-wrapper">
-              {allcars?.map((car, index) => (
-                <CarCard key={`$${model}-${year}-${index}`} car={car} />
-              ))}
-              {/* <CarsList cars={allcars} /> */}
+              {allcars.map((car, index) => {
+                const carId = `${car.make}-${car.model}-${car.year}-${car.fuel_type}`;
+                return (
+                  <CarCard
+                    key={`${model}-${year}-${index}`}
+                    car={car}
+                    isBooked={bookedIds.has(carId)}
+                  />
+                );
+              })}
             </div>
 
             {loading && (
@@ -97,7 +111,6 @@ export default function Home() {
           !loading && (
             <div className="home__error-container">
               <h2 className="text-black text-xl font-bold">no cars here :(</h2>
-              {/* <p>{allcars?.message}</p> */}
             </div>
           )
         )}
