@@ -1,23 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { auth } from "@/lib/firebase";
-import { User } from "firebase/auth";
+import { useAuth } from "@/contents/AuthContext";
 import { isAdmin } from "@/utils";
-import { AdminLogin, AdminCarsTable } from "@/components";
+import AdminLogin from "@/components/AdminLogin";
+import AdminCarsTable from "@/components/AdminCarsTable";
 
 export default function AdminPage() {
-  const [adminUser, setAdminUser] = useState<User | null>(null);
+  const { user, loading } = useAuth();
 
-  useEffect(() => {
-    const unsub = auth.onAuthStateChanged((user) => {
-      setAdminUser(isAdmin(user?.email) ? user : null);
-    });
+  if (loading) return null;
 
-    return unsub;
-  }, []);
-
-  if (!adminUser) {
+  if (!isAdmin(user?.email)) {
     return <AdminLogin />;
   }
 

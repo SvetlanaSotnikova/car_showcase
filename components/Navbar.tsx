@@ -77,7 +77,7 @@ const Navbar = () => {
           />
         </Link>
 
-        {user && !isAdmin ? (
+        {user && !admin ? (
           <div className="flex items-center gap-4">
             <span className="text-gray-600 hidden sm:block">
               Hi, {user.email?.split("@")[0]}! 👋
