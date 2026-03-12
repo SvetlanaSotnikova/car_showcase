@@ -31,6 +31,7 @@ export interface CarProps {
   transmission: string;
   year: number;
   price?: number;
+  imageUrl?: string;
 }
 
 export interface CarCardProps {

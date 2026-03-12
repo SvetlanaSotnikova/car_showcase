@@ -9,7 +9,7 @@ import {
   sendEmailVerification,
 } from "firebase/auth";
 import { auth } from "@/lib/firebase";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { LoginForm, VerificationMessage } from "@/components";
 import { FirebaseError } from "firebase/app";
 import { useAuth } from "@/contents/AuthContext";
@@ -117,8 +117,8 @@ export default function AuthPage() {
         }
 
         await sendEmailVerification(userCredential.user);
-        localStorage.setItem("verificationEmail", email); // ✅
-        router.replace("/verify-email");
+        localStorage.setItem("verificationEmail", email);
+        router.replace("/verify-email?email");
         setVerificationSent(true);
       } else {
         await signInWithEmailAndPassword(auth, email, password);
@@ -142,6 +142,7 @@ export default function AuthPage() {
       setLoading(false);
     }
   };
+
 
   if (verificationSent) return <VerificationMessage email={email} />;
 

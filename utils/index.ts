@@ -88,6 +88,7 @@ export const sanitizeCarData = (car: CarProps) => ({
 });
 
 export const generateCarImageUrl = (car: CarProps, angle?: string) => {
+  if (car.imageUrl && !angle) return car.imageUrl;
   const { make, model, year } = car;
   const url = new URL("https://cdn.imagin.studio/getimage");
   url.searchParams.append("customer", "hrjavascript-mastery");
@@ -132,8 +133,8 @@ export function parseCars(cars: string[]): ParsedCar[] {
       fuel_type: parts[parts.length - 1],
     };
   });
-};
-
-export const isAdmin = (email?:string | null) => {
-  return email === process.env.NEXT_PUBLIC_ADMIN_EMAIL;
 }
+
+export const isAdmin = (email?: string | null) => {
+  return email === process.env.NEXT_PUBLIC_ADMIN_EMAIL;
+};
