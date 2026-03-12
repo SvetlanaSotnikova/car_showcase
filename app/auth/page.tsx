@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
@@ -9,8 +9,8 @@ import {
   sendEmailVerification,
 } from "firebase/auth";
 import { auth } from "@/lib/firebase";
-import { useRouter, useSearchParams } from "next/navigation";
-import { LoginForm, VerificationMessage } from "@/components";
+import { useRouter} from "next/navigation";
+import { LoginForm } from "@/components";
 import { FirebaseError } from "firebase/app";
 import { useAuth } from "@/contents/AuthContext";
 import { isAdmin } from "@/utils";
@@ -37,7 +37,6 @@ export default function AuthPage() {
   // errrors processing
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [verificationSent, setVerificationSent] = useState(false);
 
   useEffect(() => {
     if (!authLoading && user) {
@@ -49,27 +48,11 @@ export default function AuthPage() {
     }
   }, [user, authLoading, router]);
 
-  useEffect(() => {
-    if (!verificationSent) return;
-    const internal = setInterval(async () => {
-      const currentUser = auth.currentUser;
-      if (isAdmin(currentUser?.email)) return;
-      if (currentUser) {
-        await currentUser.reload();
-        if (currentUser.emailVerified) {
-          clearInterval(internal);
-          router.replace("/cars");
-        }
-      }
-    }, 3000);
-    return () => clearInterval(internal);
-  }, [verificationSent, router]);
-
   if (authLoading) {
     return <div>Loading...</div>;
   }
 
-  if (user && !verificationSent) {
+  if (user) {
     return null;
   }
 
@@ -118,8 +101,7 @@ export default function AuthPage() {
 
         await sendEmailVerification(userCredential.user);
         localStorage.setItem("verificationEmail", email);
-        router.replace("/verify-email?email");
-        setVerificationSent(true);
+        router.replace("/verify-email");
       } else {
         await signInWithEmailAndPassword(auth, email, password);
       }
@@ -142,9 +124,6 @@ export default function AuthPage() {
       setLoading(false);
     }
   };
-
-
-  if (verificationSent) return <VerificationMessage email={email} />;
 
   return (
     <LoginForm

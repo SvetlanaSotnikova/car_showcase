@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { User, onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase";
-import { sign } from "crypto";
+import { isAdmin } from "@/utils";
 
 interface AuthContextType {
   user: User | null;
@@ -29,6 +29,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     return unsubscribe;
   }, []);
+
+  useEffect(() => {
+    if (!user) return;
+    if (user.emailVerified || isAdmin(user.email)) return;
+
+    const createdAt = user.metadata.creationTime;
+    const hourOld =
+      Date.now() - new Date(createdAt!).getTime() > 60 * 60 * 1000;
+
+    if (hourOld) {
+      signOut(auth).then(() => {
+        window.location.replace("/auth?reason=unverified");
+      });
+    }
+  }, [user]);
 
   const logout = async () => {
     try {

@@ -1,3 +1,6 @@
+"use client";
+
+import { useSearchParams } from "next/navigation";
 import CustomButton from "./CustomButton";
 
 interface Props {
@@ -28,10 +31,17 @@ export default function LoginForm({
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !loading) onSubmit();
   };
+  const params = useSearchParams();
+  const reason = params.get("reason");
   return (
     <section className="overflow-hidden">
       <div className="mt-12 padding-x padding-y max-width">
         <div className="mx-auto max-w-md bg-white p-6 rounded-lg shadow-md space-y-4">
+          {reason === "unverified" && (
+            <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-2 rounded-md text-sm text-center">
+              Your email was not verified in time. Please register again.
+            </div>
+          )}
           <h1 className="text-2xl font-bold text-center">
             {isRegister ? "Register" : "Login"}
           </h1>
