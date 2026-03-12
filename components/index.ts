@@ -12,6 +12,9 @@ import PhoneField from "./PhoneField";
 import AboutCTA from "./AboutCTA";
 import AdminCarsTable from "./AdminCarsTable";
 import AdminLogin from "./AdminLogin";
+import VerificationBanner from "./VerificationBanner";
+import VerificationMessage from "./VerificationMesasge";
+import LoginForm from "./LoginForm";
 
 export {
   Hero,
@@ -28,5 +31,7 @@ export {
   AboutCTA,
   AdminCarsTable,
   AdminLogin,
-  // CarsList
+  VerificationBanner,
+  VerificationMessage,
+  LoginForm,
 };
